@@ -1,5 +1,5 @@
 /= render "nodes/task_node_creation_modal"
-- if @node.parent_id.nil?
+/- if @node.parent_id.nil?
   ol.breadcrumb(style="background-color:white;")
     li.breadcrumb-item 
       = link_to "Workspace", account_my_workspace_path(current_user.accounts.first)
@@ -38,7 +38,7 @@
                           | | <div class="cp-card-context"
                           | | <div class="cp-card-context-label"><span>Cost Range: &amp;#8377; 60,000 - &amp;#8377 90,000</span></div
                           | | </div
-- elsif @node.node_type == "episode"
+/- elsif @node.node_type == "episode"
   ol.breadcrumb(style="background-color:white;")
     li.breadcrumb-item 
       = link_to "Workspace", account_my_workspace_path(current_user.accounts.first)
