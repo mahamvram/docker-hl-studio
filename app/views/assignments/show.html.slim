@@ -31,6 +31,9 @@
           strong Project:
           = @assignment.node.root.name
         p
+          strong Episode:
+          = @assignment.node.parent.parent.name
+        p
           strong Status:
           = @assignment.status_display
         p
