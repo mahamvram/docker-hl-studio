@@ -1,4 +1,4 @@
-
+/*
 // These are the class/styles used by various objects in GanttChart.  However, Firefox has problems deciphering class style when DIVs are embedded in other DIVs.
 
 // GanttChart makes heavy use of embedded DIVS, thus the style are often embedded directly in the objects html.  If this could be resolved with Firefox, it would
@@ -51,3 +51,4 @@ DIV.scroll { BORDER-RIGHT: #efefef 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: #e
 
 DIV.scroll2 { position:relative; PADDING-RIGHT: 0px; overflow:auto ;overflow-x:scroll;overflow-y:hidden; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; WIDTH: 482px; PADDING-TOP: 0px; BACKGROUND-COLOR: #ffffff }
 
+*/
