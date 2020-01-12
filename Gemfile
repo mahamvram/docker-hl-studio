@@ -12,6 +12,7 @@ gem 'pg'
 gem 'simple_form'
 
 gem 'paperclip'
+gem 'aws-sdk-s3'
 
 gem 'slim-rails'
 
