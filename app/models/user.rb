@@ -8,5 +8,5 @@ class User < ApplicationRecord
   has_and_belongs_to_many :accounts
   accepts_nested_attributes_for :accounts
   attribute_choices :user_role ,  [['admin', 'Admin'], ['sv', 'Supervisor'], ['art', 'Artist']]
-  attribute_choices :user_designation ,  [['animator', '2d Animator'], ['comp', 'Compositor'], ['la', 'Layout Artist']]
+  # attribute_choices :user_designation ,  [['animator', '2d Animator'], ['comp', 'Compositor'], ['la', 'Layout Artist']]
 end
