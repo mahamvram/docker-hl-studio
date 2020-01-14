@@ -9,6 +9,8 @@ div.panel.panel-default(style="margin-top:100px;margin-left:30px;width:40%;paddi
         .form-group
           = u.input :user_role, collection: User.user_role_choices, label: false, required: true, autofocus: true, placeholder: " Email ", input_html: {class: "form-control"}
         .form-group
+          = u.input :user_designation, collection: User.user_designation_choices, label: false, placeholder: " Designation ", input_html: {class: "form-control"}
+        .form-group
           = u.input :hprofile_link, label: false, placeholder: " Humminglive Profile link ", input_html: {class: "form-control"}
         .form-group
           = u.input :password, label: false, required: true, placeholder: " Password ", input_html: {class: "form-control"}
