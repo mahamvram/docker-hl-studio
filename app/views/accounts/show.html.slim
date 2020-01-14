@@ -1,5 +1,5 @@
 div(style="margin-top:100px;")
-  div.panel.panel-default(style="width:90%;padding:10px;margin-left:10px;")
+  div.panel.panel-default(style="width:100%;padding:10px;margin-left:10px;")
     p#notice = notice
 
     p
@@ -17,8 +17,8 @@ div(style="margin-top:100px;")
       .col-md-2
         = link_to "My workspace", account_my_workspace_path(@account) 
     .container(style="margin-top:10px")
-      div.panel.panel-default(style="width:70%";padding:10px;)
-        div(style="padding:20px;")
+      div.panel.panel-default(style="width:90%";padding:5px;)
+        div(style="padding:10px;")
           h3 Users list
           hr
           - @account.users.each do |user|
