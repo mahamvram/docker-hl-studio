@@ -28,8 +28,10 @@ class NodesController < ApplicationController
       if @node.save
           @pre_production = Node.create(name: 'Pre Production', node_type: "category", account_id: @node.account.id, state: "a", parent: @node)
           @production = Node.create(name: 'Production', node_type: "category", account_id: @node.account.id, state: "a", parent: @node)
+          @post_production = Node.create(name: 'Post Production', node_type: "category", account_id: @node.account.id, state: "a", parent: @node)
           @pre_production.save!
           @production.save!
+          @post_production.save!
           format.html { redirect_to node_path(@node), notice: 'Node was successfully created.' }
           format.json { render :show, status: :created, location: @node }
       else
