@@ -1,0 +1,90 @@
+ol.breadcrumb(style="background-color:white;")
+    li.breadcrumb-item 
+      = link_to "Workspace", account_my_workspace_path(current_user.accounts.first)
+    li.breadcrumb-item 
+      = link_to node_path(@node.root.id)
+        = @node.root.name
+    li.breadcrumb-item 
+        = link_to node_path(@node.parent.parent.id)
+          = @node.parent.parent.name
+    li.breadcrumb-item.active aria-current="page" 
+      | Task Form
+.row
+  .col-md-12
+    = simple_nested_form_for(@node, url: update_task_form_nodes_path(node_id: @node.id), html: {class: 'm-t'}) do |f|
+      div(style="width:90%")
+        .form-group
+          = f.input :name, input_html: {class: "form-control"}
+          = f.input :parent_id ,  :as => :hidden
+        /.form-group
+          - unless params[:parent_id]
+              = f.input :node_type ,  collection: [["Series", 'series'], ["Film", 'film']], input_html: {class: "form-control"}
+          - else
+            = f.input :node_type,:as => :hidden
+        .form-group
+          = f.input :description, input_html: {class: "form-control"}
+          = f.input :state, input_html: { value: 'a' },  :as => :hidden
+          = f.input :account_id, input_html: { value: current_user.accounts.last.id },  :as => :hidden
+      hr
+      = f.simple_fields_for :shot_files do |s|
+        div.panel.panel-default(style="padding:10px;width:90%")
+          = s.input :shot_image, as: :file, input_html: {class: "form-control"}, label: "Shot File", style: ""
+      hr
+      = f.simple_fields_for :assignments do |a|
+        div.panel.panel-default(style="padding:10px;width:90%")
+          .row
+            .col-md-7
+              h2
+                small.text-muted 
+                  | User Assignment
+              .form-group
+                .row
+                  .col-md-2
+                    strong Assign To
+                  .col-md-8
+                    =a.association :user, collection: current_user.accounts.first.users.map {|a| ["#{a.name}      WIP - #{a.assignments.where("status = ? OR status = ?", "p", "r").count}", a.id]}, label: false, placeholder: '', input_html: {class: "form-control"}
+              .form-group
+                .row
+                  .col-md-2
+                    strong Status
+                  .col-md-8
+                    = a.input :status, collection: Assignment.status_choices, label: false, placeholder: 'Status ', input_html: {class: "form-control", style: ""}
+              .form-group
+                .row
+                  .col-md-2
+                    strong Start Date
+                  .col-md-8
+                    =a.input :start_date, label: false, placeholder: '', input_html: {class: ""}
+              .form-group
+                .row
+                  .col-md-2
+                    strong End Date
+                  .col-md-8
+                    =a.input :end_date, label: false, placeholder: '', input_html: {class: ""}
+              .form-group
+                .row
+                  .col-md-2
+                    strong Deadline
+                  .col-md-8
+                    =a.input :completition_date, label: false, placeholder: '', input_html: {class: ""}
+              .form-group
+                = a.input :description, label: false, placeholder: 'Description ', input_html: {class: "form-control", style: "width:80%"}
+              
+              =a.association :node, label: false, placeholder: '', input_html: {class: ""}, as: :hidden
+            .col-md-5
+              #user_info(style="margin-top:50px")
+      .form-actions
+        = f.button :submit, value: "Update Task"
+  /.col-md-3
+    #user_info(style="margin-top:300px")
+      /= render "user_info"
+
+javascript:
+  $(function(){
+    $('#node_assignments_attributes_0_user_id').change(function() {
+      var user_id = $('#node_assignments_attributes_0_user_id').val();
+      $.get('/nodes/user_info', {user_id: user_id}, function(data){
+        $('#user_info').html(data);
+      }) 
+    });
+  })
