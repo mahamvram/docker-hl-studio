@@ -33,6 +33,10 @@
         p
           strong Episode:
           = @assignment.node.parent.parent.name
+        -if @assignment.node.parent.name == "Production"
+          p
+            strong Scene:
+            = @assignment.scenes
         p
           strong Status:
           = @assignment.status_display
@@ -51,7 +55,7 @@
       .col-md-4
         - if current_user.user_role=="admin"
           .row(style="margin-top:30px;")
-            = link_to "Edit", edit_task_form_path(@assignment.node.id), class: "btn btn-default"
+            = link_to "Edit", edit_task_form_path(@assignment.node.id, category: @assignment.node.parent.name), class: "btn btn-default"
           - if @assignment.status != "a"
             .row(style="margin-top:30px;")
                 = link_to "Approve", assignment_task_review_path(@assignment, status: "approve"), class: "btn btn-default", style: "background-color: green;color:#fff"

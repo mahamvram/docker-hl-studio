@@ -57,7 +57,7 @@
         .col-md-6
           /= link_to '#',  class: 'new_task_btn', style: "margin-left:75%",  node_id: node.id do
             ' Add Task 
-          = link_to "Add Tasks", task_form_path(node.id), style: "margin-left:75%;"
+          = link_to "Add Tasks", task_form_path(node.id, category: node.name), style: "margin-left:75%;"
     .container(style="")
       div(style="width:93%;margin-left:60px;")
         - if node.leaves

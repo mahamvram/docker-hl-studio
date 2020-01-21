@@ -3,6 +3,7 @@ table.table.table-bordered
     tr
       th scope="col"  Task
       th scope="col"  Project
+      th scope="col"  Scene
       th scope="col"  Start Date
       th scope="col"  End date
       th
@@ -12,6 +13,10 @@ table.table.table-bordered
         tr
           td = a.node.name
           td = a.node.root.name
+          -if a.node.parent.name == "Production"
+            td = a.scenes
+          -else
+            td --
           td = a.start_date
           td = a.end_date
           td = link_to "Show", assignment_path(a), style: ""
