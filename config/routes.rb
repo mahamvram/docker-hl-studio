@@ -17,12 +17,14 @@ Rails.application.routes.draw do
   resources :users
   get '/nodes/new/(:parent_id)', to: 'nodes#new', as: :new_node
   get '/nodes/task_form/(:parent_id)', to: 'nodes#task_form', as: :task_form
+  get '/nodes/edit_task_form/(:node_id)', to: 'nodes#edit_task_form', as: :edit_task_form
   get '/nodes/episode_form/(:parent_id)', to: 'nodes#episode_form', as: :episode_form
   resources :nodes, only: [:index, :create, :edit, :show] do
     resources :assignments
     get  'task_node_creation', on: :collection
     post 'create_episode_form', on: :collection
     post 'create_task_form', :on => :collection
+    patch 'update_task_form', :on => :collection
     get 'user_info', on: :collection
   end
   resources :assignments do

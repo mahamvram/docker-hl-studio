@@ -50,6 +50,8 @@
           = @assignment.description
       .col-md-4
         - if current_user.user_role=="admin"
+          .row(style="margin-top:30px;")
+            = link_to "Edit", edit_task_form_path(@assignment.node.id), class: "btn btn-default"
           - if @assignment.status != "a"
             .row(style="margin-top:30px;")
                 = link_to "Approve", assignment_task_review_path(@assignment, status: "approve"), class: "btn btn-default", style: "background-color: green;color:#fff"

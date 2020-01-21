@@ -54,6 +54,15 @@ class NodesController < ApplicationController
     @shot_files = @node.shot_files.build
   end
 
+  def edit_task_form
+    if params[:node_id]
+      @node = Node.find(params[:node_id])
+    end
+    # @node = Node.new(parent_id: params[:parent_id], node_type: @node_type)
+    # @assignments = @node.assignments.build
+    # @shot_files = @node.shot_files.build
+  end
+
   def create_task_form
     @node = Node.new(node_params)
 
@@ -63,6 +72,19 @@ class NodesController < ApplicationController
           format.json { render :show, status: :created, location: @node }
       else
         format.html { render :new }
+        format.json { render json: @node.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update_task_form
+    @node = Node.find(params[:node_id])
+    respond_to do |format|
+      if @node.update(node_params)
+        format.html { redirect_to assignment_path(@node.assignments.last.id), notice: 'Node was successfully updated.' }
+        format.json { render :show, status: :ok, location: @node }
+      else
+        format.html { render :edit }
         format.json { render json: @node.errors, status: :unprocessable_entity }
       end
     end
