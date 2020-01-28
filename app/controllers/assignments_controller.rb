@@ -13,6 +13,9 @@ class AssignmentsController < ApplicationController
     if current_user.user_role == "admin"
       if params[:status]=="approve"
         @assignment.update_attributes(status: "a")
+        if @assignment.node.parent.name == "Production"
+          @assignment.update_attributes(end_date: DateTime.now)
+        end
       elsif params[:status]=="revision"
         @assignment.update_attributes(status: "r")
        elsif params[:status]=="submission"
