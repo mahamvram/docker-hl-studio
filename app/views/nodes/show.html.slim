@@ -51,33 +51,36 @@
                           | | <div class="cp-card-context-label"><span>Cost Range: &amp;#8377; 60,000 - &amp;#8377 90,000</span></div
                           | | </div
                         hr
-                        - if pre_total_task > 0
-                          Strong Pre Production : 
-                          = pre_total_task.round(0)
-                          .progress style=""
-                            .progress-bar.progress-bar-success.progressbar style="width:#{pre_approved_per.round(0)}%; height:100px;"
-                              .row
-                                = pre_approved.round(0)
-                            .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pre_approved_per.round(0)}%"
-                              = (pre_total_task - pre_approved).round(0)
-                        - if pro_total_task > 0
-                          Strong Pro Production : 
-                          = pro_total_task.round(0)
-                          .progress style=""
-                            .progress-bar.progress-bar-success.progressbar style="width:#{pro_approved_per.round(0)}%; height:100px;"
-                              .row
-                                = pro_approved.round(0)
-                            .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pro_approved_per.round(0)}%"
-                              = (pro_total_task - pro_approved).round(0)
-                        - if pos_total_task > 0
-                          Strong Post Production : 
-                          = pos_total_task.round(0)
-                          .progress style=""
-                            .progress-bar.progress-bar-success.progressbar style="width:#{pos_approved_per.round(0)}%; height:100px;"
-                              .row
-                                = pos_approved.round(0)
-                            .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pos_approved_per.round(0)}%"
-                              = (pos_total_task - pos_approved).round(0)
+                        - if pre_total_task > 0 || pro_total_task > 0 || pos_total_task > 0
+                          - if pre_total_task > 0
+                            Strong Pre Production : 
+                            = pre_total_task.round(0)
+                            .progress style=""
+                              .progress-bar.progress-bar-success.progressbar style="width:#{pre_approved_per.round(0)}%; height:100px;"
+                                .row
+                                  = pre_approved.round(0)
+                              .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pre_approved_per.round(0)}%"
+                                = (pre_total_task - pre_approved).round(0)
+                          - if pro_total_task > 0
+                            Strong Pro Production : 
+                            = pro_total_task.round(0)
+                            .progress style=""
+                              .progress-bar.progress-bar-success.progressbar style="width:#{pro_approved_per.round(0)}%; height:100px;"
+                                .row
+                                  = pro_approved.round(0)
+                              .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pro_approved_per.round(0)}%"
+                                = (pro_total_task - pro_approved).round(0)
+                          - if pos_total_task > 0
+                            Strong Post Production : 
+                            = pos_total_task.round(0)
+                            .progress style=""
+                              .progress-bar.progress-bar-success.progressbar style="width:#{pos_approved_per.round(0)}%; height:100px;"
+                                .row
+                                  = pos_approved.round(0)
+                              .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pos_approved_per.round(0)}%"
+                                = (pos_total_task - pos_approved).round(0)
+                        - else
+                          B No tasks
                         
 
 - elsif @node.node_type == "episode"
