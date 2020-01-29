@@ -38,24 +38,87 @@ section#create-a-post.sce-content
           = link_to "Create Project", new_node_path, style: "font-size:14px;font-weight:1000 !important", class: "btn btn-default"
     .row
       .col-md-12
+        /.progress
+          /.progress-bar.progress-bar-success.progress-bar-striped aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" style="width:40%" 
+            | 40% Complete (success)
+          .progress-bar.progress-bar-success.progressbar style="width:#{pc}"
+            | Free Space
+          .progress-bar.progress-bar-danger.progressbar style="width:40%"
+            | danger
+
         .cp-wrapper
           ul.cp-section-list
             - @nodes.each do |node|
               li.cp-card-outer
                 .cp-card
-                  .cp-card-preview-image-outer
+                  .cp-card-preview-image-outer(style="margin-top:20px")
                     img.img-responsive.center-block alt=("post thumb image") src="/assets/humming-live-logo.jpg" /
                   .cp-card-details
                     .cp-card-text style=("overflow: set !important") 
                       = link_to node_path(node)
-                        h4.cp-card-title = node.root.name
-                      /! <h5 class="cp-card-sub-title">New entity</h5
-                      = node.root.description.truncate(30)
-                      /! <p class="cp-card-description">Showcasing technology, market focus and application</p
+                        h4.cp-card-title = node.root.name 
+                    - episode = node.find_all_by_generation(2)
+                    - category = node.find_all_by_generation(3)
+                    - category_ids =category.collect(&:id)
+                    /= category.to_json
+                    /- category.each do |cat|
+                    /= cat.children.includes(:assignments).where("assignments.status = ?", 'a').references(:assignments).to_json
+                    - total_task = node.leaves.where(:node_type => 'task', state: "a").count.to_f
+                    - approved_task = Assignment.includes(:node).where("status = ? AND nodes.parent_id in (?)", 'a', category_ids.flatten.reject(&:blank?)).references(:nodes).count.to_f
+                    - approved_task_percentage = (approved_task / total_task) * 100
+                    /- episode.each do 
+                    /- node.find_all_by_generation(3).each do |n|
+                      - if n.name == "Pre Production"
+                        - n.children.each do |c|
+                          - c.assignments.each do |a|
+                            - if a.status  
+                    hr
+                    - if node.leaves.where(:node_type => 'task').count > 0  
+                      strong Total Task : 
+                      = total_task.round(0) 
+                      br               
+                      .progress style=""
+                        /.progress-bar.progress-bar-success.progress-bar-striped aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" style="width:40%" 
+                          | 40% Complete (success)
+                        .progress-bar.progress-bar-success.progressbar style="width:#{approved_task_percentage.round(0)}%; height:100px;"
+                          .row
+                            = approved_task.round(0)
+                        .progress-bar.progress-bar-danger.progressbar style="width:#{100 - approved_task_percentage.round(0)}%"
+                          = (total_task - approved_task).round(0)
+                    - else
+                      Strong No Tasks
+                    /- pre_prod_count = Node.where(node_type: "task", parent_id: pre_pro).count
+                      - pro = node.find_all_by_generation(3).where(name: "Production").last.id
+                      - prod_count= Node.where(node_type: "task", parent_id: pro).count
+                      - post_pro = node.find_all_by_generation(3).where(name: "Post Production").last.id
+                      - post_prod_count = Node.where(node_type: "task", parent_id: post_pro).count
+                      =  total_count = pre_prod_count.to_i + prod_count.to_i + post_prod_count.to_i
+                      /= node.find_all_by_generation(4).to_json
+                      - pre_pro_app_count = Assignment.includes(:node).where("nodes.parent_id = ? and status = 'a'", pre_pro).references(:nodes).count.to_i
+                      - pro_app_count = Assignment.includes(:node).where("nodes.parent_id = ? and status = 'a'", pro).references(:nodes).count.to_i
+                      - post_pro_app_count = Assignment.includes(:node).where("nodes.parent_id = ? and status = 'a'", post_pro).references(:nodes).count.to_i
+                      = total_app_count = pre_pro_app_count + pro_app_count + post_pro_app_count
+
+
+                    /! <h5 class="cp-card-sub-title">New entity</h5
+                    /= node.leaves.where(node_type: "category", name: "Post Production").to_json
+                    /= node.root.description.truncate(30)
+                    /! <p class="cp-card-description">Showcasing technology, market focus and application</p
                     /!
                       | | <div class="cp-card-context"
                       | | <div class="cp-card-context-label"><span>Cost Range: &amp;#8377; 60,000 - &amp;#8377 90,000</span></div
                       | | </div
+                    
+        /- @nodes.each
+          div.panel.panel-default(style="margin-left:30px;width:95%;padding:10px;margin-top:30px")
+            .row
+              .col-md-3.col-xs-3
+                .row
+                  img.img-responsive.center-block alt=("post thumb image") src="/assets/humming-live-logo.jpg" /
+                .row   
+                  .col-md-12()          
+                    = node.name
+
 /.row
   .col-md-12
     .create-post-btn style=("margin-top:0px !important")
