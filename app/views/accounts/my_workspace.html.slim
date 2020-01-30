@@ -57,11 +57,7 @@ section#create-a-post.sce-content
                     .cp-card-text style=("overflow: set !important") 
                       = link_to node_path(node)
                         h4.cp-card-title = node.root.name 
-                    /- Assignment.each do |a|
-                      - if a.node.root.id == node.id
-                        - if a.status == 
-                    /- episode.leaves.where(node_type: "task").each do |task|
-                      = task.assignments.collect{|a| a.status == "a"}
+                    - episode = node.find_all_by_generation(2)
                     - category = node.find_all_by_generation(3)
                     - category_ids =category.collect(&:id)
                     - total_task = node.leaves.where(:node_type => 'task', state: "a").count.to_f
