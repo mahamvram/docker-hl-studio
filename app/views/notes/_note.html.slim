@@ -5,11 +5,16 @@
       .content
         p
           .row
-            .col-md-2.col-xs-6
-              strong = note.user.name
             .col-md-8.col-xs-6
-              = note.notes_subject
+              strong = note.user.name
             .col-md-2.col-xs-6
               - if current_user == note.user
-                = link_to 'Delete', [note.assignment, note], method: :delete, class: "button btn btn-danger", data: { confirm: 'Are you sure?' }
+                = link_to "Delete", [note.assignment, note], method: :delete, class: "button btn btn-danger", data: { confirm: 'Are you sure?' }
+          .row
+            .col-md-8.col-xs-6
+              b= note.created_at.strftime("%d-%b-%Y")
+          .row
+            .col-md-11.col-xs-10(style="text-align: justify;")
+              = note.notes_subject
+            
 hr

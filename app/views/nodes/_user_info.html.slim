@@ -1,30 +1,44 @@
 .container(style="padding:20px;background-color:#daeddf;color:#000;width:100%")
-  .row
-    .col-md-6
-      | User Name
-    .col-md-6
-      strong = @user.name
-  .row
-    .col-md-6
-      | Current Task
-    .col-md-6
-      strong = @user.assignments.where(status: "p").count
-  .row
-    .col-md-6
-      | Revision Task
-    .col-md-6
-      strong = @user.assignments.where(status: "r").count
-  .row
-    .col-md-6
-      | Approval Pending
-    .col-md-6
-      strong = @user.assignments.where(status: "wa").count
-  .row
-    .col-md-12
-      - if !@user.hprofile_link.blank?
-          - encoded_url = URI.encode(@user.hprofile_link)
-          - link = URI.parse(encoded_url)
-          - url = link.scheme.blank? ? "https://" + @user.hprofile_link : @user.hprofile_link
-          = link_to url, :target => '_blank', style: "color:#ff6f08"
-            b
-              u  #{truncate(@user.hprofile_link, length: 44, omission:'...')}
+  div.user-border
+    .row
+      .col-md-10.col-md-offset-1
+        b = @user.name
+    .row
+      .col-md-10.col-md-offset-1
+        = @user.user_designation_display
+  div.user-border
+    /.row
+      .col-md-10.col-md-offset-1
+        u Projects
+    .row
+      .col-md-10.col-md-offset-1
+        - @user.assignments.where(status: "p").each do |a|
+          span.badge.badge-success(style="margin-bottom:2px;margin-right:2px;")
+            div(style="padding:3px;")
+              = link_to assignment_path(a), style: "color:white;font-size:14px;", :target => '_blank'
+                b = a.node.name.truncate(15)
+  div
+    .row
+      .col-md-6
+        b Current Task
+      .col-md-6
+        strong = @user.assignments.where(status: "p").count
+    .row
+      .col-md-6
+        b Revision Task
+      .col-md-6
+        strong = @user.assignments.where(status: "r").count
+    .row
+      .col-md-6
+        b Approval Pending
+      .col-md-6
+        strong = @user.assignments.where(status: "wa").count
+    .row
+      .col-md-12
+        - if !@user.hprofile_link.blank?
+            - encoded_url = URI.encode(@user.hprofile_link)
+            - link = URI.parse(encoded_url)
+            - url = link.scheme.blank? ? "https://" + @user.hprofile_link : @user.hprofile_link
+            = link_to url, :target => '_blank', style: "color:#ff6f08"
+              b
+                u  #{truncate(@user.hprofile_link, length: 44, omission:'...')}

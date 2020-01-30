@@ -48,7 +48,7 @@ ol.breadcrumb(style="background-color:white;")
                   .col-md-2
                     strong Status
                   .col-md-8
-                    = a.input :status, collection: Assignment.status_choices, label: false, placeholder: 'Status ', input_html: {class: "form-control", style: ""}
+                    = a.input :status, collection: Assignment.status_choices, label: false, placeholder: 'Status ', input_html: {class: "form-control", style: ""}, include_blank: false
               - if params[:category] == "Production"
                 .form-group
                   .row
@@ -56,18 +56,27 @@ ol.breadcrumb(style="background-color:white;")
                       strong Scene Name
                     .col-md-8
                       =a.input :scenes, label: false, placeholder: 'Scene Name', input_html: {class: "form-control"}
+                .form-group
+                  .row
+                    .col-md-2
+                      strong Frame
+                    .col-md-8
+                      =a.input :frame_name, label: false, placeholder: 'Frame', input_html: {class: "form-control"}
               .form-group
                 .row
                   .col-md-2
                     strong Start Date
                   .col-md-8
                     =a.input :start_date, label: false, placeholder: '', input_html: {class: ""}
-              .form-group
-                .row
-                  .col-md-2
-                    strong End Date
-                  .col-md-8
-                    =a.input :end_date, label: false, placeholder: '', input_html: {class: ""}
+              - if params[:category] == "Production"
+                =a.input :end_date, label: false, placeholder: '', input_html: {class: "", value: ""}, as: :hidden
+              - else
+                .form-group
+                  .row
+                    .col-md-2
+                      strong End Date
+                    .col-md-8
+                      =a.input :end_date, label: false, placeholder: '', input_html: {class: ""}
               .form-group
                 .row
                   .col-md-2

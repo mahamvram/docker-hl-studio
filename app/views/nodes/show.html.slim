@@ -23,6 +23,18 @@
               - episodes = Node.where("node_type = ?", "episode")
               - episodes.each do |epi|
                 - if epi.root.id == @node.id
+                  - pre_production = epi.children.where(:node_type => "category", name: "Pre Production", state: "a").last
+                  - pre_total_task = pre_production.children.count.to_f
+                  - pre_approved = Assignment.includes(:node).where("nodes.parent_id = ? AND status = ?", pre_production.id, 'a').references(:nodes).count.to_f 
+                  - pre_approved_per = (pre_approved / pre_total_task) * 100
+                  - pro_production = epi.children.where(:node_type => "category", name: "Production", state: "a").last
+                  - pro_total_task = pro_production.children.count.to_f
+                  - pro_approved = Assignment.includes(:node).where("nodes.parent_id = ? AND status = ?", pro_production.id, 'a').references(:nodes).count.to_f 
+                  - pro_approved_per = (pro_approved / pro_total_task) * 100
+                  - pos_production = epi.children.where(:node_type => "category", name: "Post Production", state: "a").last
+                  - pos_total_task = pos_production.children.count.to_f
+                  - pos_approved = Assignment.includes(:node).where("nodes.parent_id = ? AND status = ?", pos_production.id, 'a').references(:nodes).count.to_f 
+                  - pos_approved_per = (pos_approved / pos_total_task) * 100
                   li.cp-card-outer
                     .cp-card
                       .cp-card-preview-image-outer
@@ -38,6 +50,39 @@
                           | | <div class="cp-card-context"
                           | | <div class="cp-card-context-label"><span>Cost Range: &amp;#8377; 60,000 - &amp;#8377 90,000</span></div
                           | | </div
+                        hr
+                        - if pre_total_task > 0 || pro_total_task > 0 || pos_total_task > 0
+                          - if pre_total_task > 0
+                            Strong Pre Production : 
+                            = pre_total_task.round(0)
+                            .progress style=""
+                              .progress-bar.progress-bar-success.progressbar style="width:#{pre_approved_per.round(0)}%; height:100px;"
+                                .row
+                                  = pre_approved.round(0)
+                              .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pre_approved_per.round(0)}%"
+                                = (pre_total_task - pre_approved).round(0)
+                          - if pro_total_task > 0
+                            Strong Pro Production : 
+                            = pro_total_task.round(0)
+                            .progress style=""
+                              .progress-bar.progress-bar-success.progressbar style="width:#{pro_approved_per.round(0)}%; height:100px;"
+                                .row
+                                  = pro_approved.round(0)
+                              .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pro_approved_per.round(0)}%"
+                                = (pro_total_task - pro_approved).round(0)
+                          - if pos_total_task > 0
+                            Strong Post Production : 
+                            = pos_total_task.round(0)
+                            .progress style=""
+                              .progress-bar.progress-bar-success.progressbar style="width:#{pos_approved_per.round(0)}%; height:100px;"
+                                .row
+                                  = pos_approved.round(0)
+                              .progress-bar.progress-bar-danger.progressbar style="width:#{100 - pos_approved_per.round(0)}%"
+                                = (pos_total_task - pos_approved).round(0)
+                        - else
+                          B No tasks
+                        
+
 - elsif @node.node_type == "episode"
   ol.breadcrumb(style="background-color:white;")
     li.breadcrumb-item 
@@ -59,7 +104,7 @@
             ' Add Task 
           = link_to "Add Tasks", task_form_path(node.id, category: node.name), style: "margin-left:75%;"
     .container(style="")
-      div(style="width:93%;margin-left:60px;")
+      div(style="width:98%;margin-left:0px;")
         - if node.leaves
           table.table.table-bordered
             thead-light

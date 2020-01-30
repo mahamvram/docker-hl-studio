@@ -11,74 +11,130 @@
     li.breadcrumb-item.active aria-current="page" 
       = @assignment.node.name
 .container(style="margin-top:10px;")
-  div.panel.panel-default(style="padding:10px;")
-    .row
-      .col-md-4
-        - @assignment.node.shot_files.each do |img|
-          = image_tag img.shot_image.url(:medium)
-          = link_to 'Download', img.shot_image(:original), download: "file_#{@assignment.node.name}"
-        p
-          = @assignment.description
-      .col-md-4
-        p#notice = notice
-        p
-          strong Assigned To:
-          = @assignment.user.name
-        p
-          strong Task:
-          = @assignment.node.name
-        p
-          strong Project:
-          = @assignment.node.root.name
-        p
-          strong Episode:
-          = @assignment.node.parent.parent.name
-        -if @assignment.node.parent.name == "Production"
-          p
-            strong Scene:
-            = @assignment.scenes
-        p
-          strong Status:
-          = @assignment.status_display
-        p
-          strong Start date:
-          = @assignment.start_date
-        p
-          strong End date:
-          = @assignment.end_date
-        p
-          strong Completition date:
-          = @assignment.completition_date
-        /p
-          strong Description:
-          = @assignment.description
-      .col-md-4
-        - if current_user.user_role=="admin"
-          .row(style="margin-top:30px;")
-            = link_to "Edit", edit_task_form_path(@assignment.node.id, category: @assignment.node.parent.name), class: "btn btn-default"
-          - if @assignment.status != "a"
-            .row(style="margin-top:30px;")
-                = link_to "Approve", assignment_task_review_path(@assignment, status: "approve"), class: "btn btn-default", style: "background-color: green;color:#fff"
-                /=> link_to 'Edit', edit_assignment_path(@assignment)
-                /'|
-            .row(style="margin-top:20px;")
-                 = link_to "Review", assignment_task_review_path(@assignment, status: "revision"), class: "btn btn-default", style: "background-color: orange;color:#fff"
-        - else
-          - if @assignment.status != "wa" || @assignment.status != "a"
-            - if @assignment.status == "r" || @assignment.status == "p"
-              .row(style="margin-top:30px;")
-                  = link_to "Send for Approval", assignment_task_review_path(@assignment, status: "submission"), class: "btn btn-default", style: "background-color: yellow;color:#000"
-                  /=> link_to 'Edit', edit_assignment_path(@assignment)
-                  /'|
+  .row
+    .col-md-8
+      div.panel.panel-default(style="padding:5px;")
+        .row
+          .col-md-5
+            - if @assignment.node.shot_files.count > 0
+              - @assignment.node.shot_files.each do |img|
+                = image_tag img.shot_image.url(:medium)
+                = link_to 'Download', img.shot_image(:original), download: "file_#{@assignment.node.name}"
+            - else
+              img src="/assets/no-image.png" height= "200" width = "200"
+            p
+              = @assignment.description
+          .col-md-6
+            div.task-show-border
+              p
+                | Task:
+              P
+                b = @assignment.node.name
+              p
+                | Project:
+              P
+                b = @assignment.node.root.name
+              p
+                | Episode:
+              p
+                b = @assignment.node.parent.parent.name
+            div.task-show-border
+              p
+                | Assigned To:
+              p
+                b = @assignment.user.name
+              p
+                b = @assignment.user.user_designation_display
+              -if @assignment.node.parent.name == "Production"
+                p
+                  | Scene:
+                p
+                  b = @assignment.scenes
+                p
+                  | Frame:
+                p
+                  b = @assignment.frame_name
+              p
+                | Other tasks :
+              p
+                - other_task = @assignment.user.assignments.select{|a| a.node.id unless a.node.id == @assignment.node.id}.count
+                - if other_task > 0
+                  - @assignment.user.assignments.each do |a|
+                    - if @assignment.node.id != a.node.id
+                      span.badge.badge-success(style="margin-bottom:2px;margin-right:2px;padding:10px;")
+                          = link_to assignment_path(a), style: "color:white;font-size:14px;", :target => '_blank'
+                            = a.node.name
+                - else
+                  b Currently no other tasks!
+        hr
+        .row
+            .col-md-6 
+              p
+                | Start date:
+              p
+                b = @assignment.start_date
+              p
+                | Status:
+              p
+                b   = @assignment.status_display
+              
+            .col-md-6
+              p
+                | End date:
+              p
+                b = @assignment.end_date
+              p
+                | Completition date:
+              p
+                b = @assignment.completition_date
+              /p
+                strong Description:
+                  = @assignment.description
+        hr
+        .row
+          - if current_user.user_role=="admin"
+            - if @assignment.status != "a"
+              .col-md-2
+                = link_to "Edit", edit_task_form_path(@assignment.node.id, category: @assignment.node.parent.name), class: "btn btn-default"
+              
+              .col-md-2(style="margin-left:10px;")
+                    = link_to "Approve", assignment_task_review_path(@assignment, status: "approve"), class: "btn btn-default", style: "background-color: green;color:#fff"
+                    /=> link_to 'Edit', edit_assignment_path(@assignment)
+                    /'|
+              .col-md-2(style="margin-left:10px;")
+                     = link_to "Review", assignment_task_review_path(@assignment, status: "revision"), class: "btn btn-default", style: "background-color: orange;color:#fff"
+            - else
+              .col-md-2
+                = link_to "Edit", edit_task_form_path(@assignment.node.id, category: @assignment.node.parent.name), class: "btn btn-default"
+              
+              /.col-md-4
+                    = link_to "Approve", assignment_task_review_path(@assignment, status: "approve"), class: "btn btn-default", style: "background-color: green;color:#fff"
+                    /=> link_to 'Edit', edit_assignment_path(@assignment)
+                    /'|
+              .col-md-2
+                     = link_to "Review", assignment_task_review_path(@assignment, status: "revision"), class: "btn btn-default", style: "background-color: orange;color:#fff"
+          - else
+            - if @assignment.status != "wa" || @assignment.status != "a"
+              - if @assignment.status == "r" || @assignment.status == "p"
+                .col-md-2
+                    = link_to "Send for Approval", assignment_task_review_path(@assignment, status: "submission"), class: "btn btn-default", style: "background-color: yellow;color:#000"
+                    /=> link_to 'Edit', edit_assignment_path(@assignment)
+                    /'|
+    .col-md-4
+        section.section.comments
+          .container(style="width:700px")
+            h3.subtitle.is-3(style="margin-top:0px;")
+            /strong = @assignment.notes.count
+              | No
+            - unless @assignment.notes.blank?
+              div.panel.panel-default(style="padding:10px;overflow-y: scroll;float:left;height: 500px;width:100%")
+                = render @assignment.notes 
+            - else
+              div.panel.panel-default(style="padding:10px;overflow-y: scroll;float:left;height: 500px;width:100%")
+                | No Notes Yet!!
+            div.comment-form
+              = render 'notes/form'
+  
   /.col-md-1
       = link_to 'Back', node_path(@assignment.node.root.id), class: "btn btn-default"
-section.section.comments
-  .container
-    h3.subtitle.is-3 Notes
-    /strong = @assignment.notes.count
-      | Notes
-    - unless @assignment.notes.blank?
-      div.panel.panel-default(style="padding:10px;overflow-y: scroll;float:left;height: 450px;width:100%")
-        = render @assignment.notes 
-    div.comment-form
-      = render 'notes/form'
+

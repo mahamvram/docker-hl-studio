@@ -4396,3 +4396,24 @@ max-height: 148px;}
 a.custom-whatsapp-btn{color: #fff!important;}
 .custom-whatsapp-btn i{font-size:22px;}
 /*=====Common CSS for all pages END here============*/
+
+
+/*custom local css */
+.user-border {
+  border-left: 6px solid red;
+  background-color: #FFF;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-bottom-style: solid
+}
+
+.task-show-border{
+  border-left: 6px solid #87dffa;
+  border-radius: 20px;
+  background-color: #e8eded;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-bottom: 2px solid grey;
+  border-top: 2px solid grey; 
+  border-right: 2px solid grey;
+}
