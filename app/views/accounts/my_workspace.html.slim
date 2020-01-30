@@ -49,13 +49,14 @@ section#create-a-post.sce-content
         .cp-wrapper
           ul.cp-section-list
             - @nodes.each do |node|
-              li.cp-card-outer
-                .cp-card
-                  .cp-card-preview-image-outer(style="margin-top:20px")
-                    img.img-responsive.center-block alt=("post thumb image") src="/assets/humming-live-logo.jpg" /
-                  .cp-card-details
-                    .cp-card-text style=("overflow: set !important") 
-                      = link_to node_path(node)
+              = link_to node_path(node)
+                li.cp-card-outer
+                  .cp-card
+                    .cp-card-preview-image-outer(style="margin-top:20px")
+                      img.img-responsive.center-block alt=("post thumb image") src="/assets/humming-live-logo.jpg" /
+                    .cp-card-details
+                      .cp-card-text style=("overflow: set !important") 
+                     
                         h4.cp-card-title = node.root.name 
                     - episode = node.find_all_by_generation(2)
                     - category = node.find_all_by_generation(3)
@@ -68,10 +69,12 @@ section#create-a-post.sce-content
                       strong Total Episodes : 
                       = episode.count
                       br
+                      br
                     - if node.leaves.where(:node_type => 'task').count > 0  
                       strong Total Task : 
                       = total_task.round(0) 
-                      br               
+                      br   
+                      br            
                       .progress style=""
                         /.progress-bar.progress-bar-success.progress-bar-striped aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" style="width:40%" 
                           | 40% Complete (success)
