@@ -1,0 +1,47 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    ports:
+      - "9402:5434"
+    # environment:
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+        # POSTGRES_DB: hlive_studio_dev
+        # POSTGRES_USER: postgres
+      # PGDATA: /data/postgres
+    volumes:
+      # - db-data:/var/lib/postgresql/data
+      - ../data/hlstudio/postgres-data:/var/lib/postgresql/data
+  web:
+    build: .
+    image: hlstudio
+    command: bundle exec rails s -p 3001 -b '0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - "3001:3001"
+      # http://127.0.0.1:3001/
+    # environment:
+    #   - RAILS:development
+    #   - AWS_ACCESS_KEY_ID:0Z8Y3AQQ2ZE4VPMQSVR2
+    #   - AWS_SECRET_ACCESS_KEY:OPNUn/JDICXRp4LtWvo6ilh5q+yekQpoKdTipQfD
+    #   - FOG_DIRECTORY:taldevi-production-assets
+    depends_on:
+      - db
+  # worker:
+  #   image: tnelat:latest
+  #   command: bundle exec rake jobs:work
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - db
+  webpack:
+    image: hlstudio:latest
+    command: bin/webpack-dev-server
+    volumes:
+      - .:/app
+  # mailcatcher:
+  #     image: yappabe/mailcatcher
+  #     ports:
+  #         - 1025:1025
+  #         - 9403:1080

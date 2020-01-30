@@ -3,14 +3,14 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: goldfinchweb
-  password: admin@123
-  host: localhost
+  username: postgres
+  # password: admin@123
+  host: db
   timeout: 5000
 
 development:
   <<: *default
-  database: hlive_studio_dev
+  # database: hlive_studio_dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
