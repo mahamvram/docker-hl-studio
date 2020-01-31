@@ -59,6 +59,18 @@ section#create-a-post.sce-content
                      
                         h4.cp-card-title = node.root.name 
                     - episode = node.find_all_by_generation(2)
+                    - approved_episode = node.find_all_by_generation(2).where(:episode_status => "Approved")
+                    - task_ids = node.leaves.where(:node_type => "task").collect(&:id)
+                    /- node.leaves.where(:node_type => "episode").each do |e|
+                    /- @task_count = 0
+                    /- node.leaves.where(:node_type => "episode").each do |episode|
+                      - @task_count = episode.leaves.where(:node_type => "task").count.to_i
+                      - episode.leaves.where(:node_type => "task").each do |t|
+                        /- assignment_count = t.assignments.count.to_i
+                        - @approved_count = t.assignments.where(:status => "a").count.to_i
+                        - if @approved_count == @task_count
+                          - @pproved_episode = @approved_episode + 1
+                    /= @approved_assignment
                     - category = node.find_all_by_generation(3)
                     - category_ids =category.collect(&:id)
                     - total_task = node.leaves.where(:node_type => 'task', state: "a").count.to_f
@@ -68,8 +80,17 @@ section#create-a-post.sce-content
                     - if episode.count > 0
                       strong Total Episodes : 
                       = episode.count
+                      - approved_percent = (approved_episode.count.to_f/episode.count.to_f)*100
                       br
                       br
+                      .progress style=""
+                        /.progress-bar.progress-bar-success.progress-bar-striped aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" style="width:40%" 
+                          | 40% Complete (success)
+                        .progress-bar.progress-bar-success.progressbar style="width:#{approved_percent.round(0)}%; height:100px;"
+                          .row
+                            = approved_episode.count.to_i
+                        .progress-bar.progress-bar-danger.progressbar style="width:#{100 - approved_percent.round(0)}%"
+                          = (episode.count - approved_episode.count.to_i)
                     - if node.leaves.where(:node_type => 'task').count > 0  
                       strong Total Task : 
                       = total_task.round(0) 
