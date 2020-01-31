@@ -21,6 +21,7 @@ services:
     ports:
       - "3001:3001"
       # http://127.0.0.1:3001/
+      # https://www.youtube.com/watch?v=ymlWt1MqURY
     # environment:
     #   - RAILS:development
     #   - AWS_ACCESS_KEY_ID:0Z8Y3AQQ2ZE4VPMQSVR2
@@ -40,6 +41,8 @@ services:
     command: bin/webpack-dev-server
     volumes:
       - .:/app
+    ports:
+      - "3035:3035"
   # mailcatcher:
   #     image: yappabe/mailcatcher
   #     ports:
