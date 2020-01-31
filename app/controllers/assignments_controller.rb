@@ -12,13 +12,32 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:assignment_id])
     if current_user.user_role == "admin"
       if params[:status]=="approve"
-        @assignment.update_attributes(status: "a")
+        @assignment.status = "a"
+        node = @assignment.node
+        @assignment.save!
+        episode = node.parent.parent
+        @task_count = episode.leaves.where(:node_type => "task").count.to_i
+        @approved_task_count = 0
+        episode.children.where(node_type: "category").each do |cat|
+          cat.children.where(node_type: "task").each do |task|
+            task.assignments.each do |a|
+              if a.status == "a"
+                @approved_task_count += 1
+              end
+            end
+          end
+        end
+        if @task_count == @approved_task_count
+          node.parent.parent.update_attributes(episode_status: "Approved")
+        else
+           node.parent.parent.update_attributes(episode_status: "In Progress")
+        end
         if @assignment.node.parent.name == "Production"
           @assignment.update_attributes(end_date: DateTime.now)
         end
       elsif params[:status]=="revision"
         @assignment.update_attributes(status: "r")
-       elsif params[:status]=="submission"
+      elsif params[:status]=="submission"
         @assignment.update_attributes(status: "wa")
       end
       redirect_to node_path(@assignment.node.parent.parent.id)
